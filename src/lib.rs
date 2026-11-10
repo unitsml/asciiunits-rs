@@ -5,6 +5,7 @@ mod mapper;
 use parsanol::{PargArtifact, PargError};
 use serde::Serialize;
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 
 pub const ARTIFACT: &str = include_str!("../artifacts/unitsml.json");
 pub const ARTIFACT_SHA256: &str =
@@ -101,7 +102,11 @@ impl Parser {
 
     /// Accept only the pinned producer artifact, including its exact bytes.
     pub fn from_artifact(source: &str) -> Result<Self, Error> {
-        if source.as_bytes() != ARTIFACT.as_bytes() {
+        let actual: String = Sha256::digest(source.as_bytes())
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect();
+        if actual != ARTIFACT_SHA256 {
             return Err(Error::Artifact {
                 message: "AsciiUnits artifact does not match the pinned bytes".into(),
             });

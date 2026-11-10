@@ -1,0 +1,16 @@
+[package]
+name = "asciiunits"
+version = "0.1.0"
+edition = "2021"
+license = "BSD-2-Clause"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+parsanol = { git = "https://github.com/parsanol/parsanol-rs", rev = "20d5e6cebcade3cf2111a00a7ef3f5b69d673481" }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+
+[profile.dev]
+debug = 0

@@ -1,6 +1,7 @@
 [package]
 name = "asciiunits"
 version = "0.1.0"
+repository = "https://github.com/unitsml/asciiunits-rs"
 edition = "2021"
 license = "BSD-2-Clause"
 

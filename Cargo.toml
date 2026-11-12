@@ -9,7 +9,7 @@ license = "BSD-2-Clause"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
-parsanol = { git = "https://github.com/parsanol/parsanol-rs", rev = "20d5e6cebcade3cf2111a00a7ef3f5b69d673481" }
+parsanol = { git = "https://github.com/parsanol/parsanol-rs", rev = "5206a33b5417b4ecd3a601930461ed2967c871e7" }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["preserve_order"] }
 sha2 = "0.11"

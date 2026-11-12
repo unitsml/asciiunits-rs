@@ -1,0 +1,32 @@
+{
+  "producer": "unitsml/asciiunits",
+  "producer_commit": "89b72e6b3c33154ee35f562a4bab4cc9d6fc2c05",
+  "producer_script": "scripts/regen_contracts.rb (rake contracts:regen), oracle via scripts/gen_oracle.rb",
+  "copied_verbatim_from": [
+    "corpora/unitsml/corpus.json",
+    "corpora/unitsml/expected-kinds.json",
+    "corpora/unitsml/inputs.txt"
+  ],
+  "artifact_checksum": "sha256:aa22618c80dc02f3fe1edf2c798dbe34aceae5f4d84524ff98f76a2b91af151d",
+  "artifact_json_sha256": "sha256:139d91337a0944d60f36bc144a205625349f4b3b8b7ff1a0fba3c61e70c57804",
+  "grammar_source_hash": "sha256:7702a1bd52072d5d860e8176b50b5bebb218c1fda864592bb7313419e94506e3",
+  "compiler_version": "1.3.113",
+  "grammar_edition": 2,
+  "files_sha256": {
+    "corpus.json": "sha256:9b487501ae48b7f23a2f747002c83259a240607831030803dec2ee2a02a4eeda",
+    "expected-kinds.json": "sha256:b7f3be8488c0e8fe7a1be6bcf74a43016de754b4dd0ebfdd6621860e1e2856df",
+    "inputs.txt": "sha256:48f4f0f61c6f87e02349537567d4094b04cec2c6771e14161787dccb0ed521f9"
+  },
+  "supersedes": {
+    "artifact_checksum": "sha256:da65d7cb155970ca2b2492dfc464ad5407d4a3b1c951c3c60a7d2177dcaa06d9",
+    "compiler_version": "1.3.108",
+    "testsuite_commit": "e6abb9e0e946eaea67d815c9cd6ee38447545a3e",
+    "difference": "143/143 cases same input and kind; 76 trees identical, 67 differ only by edition-2 structural names end_guard/lparen/rparen/hyphen (asciiunits 7b7024c)",
+    "preserved_at": "generations/da65d7cb155970ca2b2492dfc464ad5407d4a3b1c951c3c60a7d2177dcaa06d9",
+    "files_sha256": {
+      "corpus.json": "sha256:8617e37e96a0927a412f10b7ed8569ab095653839f7a7510c74e3defe9280f35",
+      "expected-kinds.json": "sha256:4b3586220ccddc3f54c1f27f06959c85f37e770046142c31c4a2889ac9c54227",
+      "inputs.txt": "sha256:48f4f0f61c6f87e02349537567d4094b04cec2c6771e14161787dccb0ed521f9"
+    }
+  }
+}

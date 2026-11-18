@@ -26,9 +26,23 @@ impl fmt::Display for ModelError {
 
 impl std::error::Error for ModelError {}
 
-/// The Document JSON the generated reader takes for one capture tree.
+/// The Document JSON the generated reader takes for one capture tree. The
+/// generated codecs read the portable-exact-json-v1 profile, which carries
+/// exact integers (a slice's offset, length, line and column) as decimal
+/// strings, so the tree's JSON numbers are written that way here.
 pub fn document_json(tree: &Value) -> Value {
-    json!({ "expression": tree })
+    json!({ "expression": portable(tree) })
+}
+
+fn portable(value: &Value) -> Value {
+    match value {
+        Value::Number(n) if n.is_u64() || n.is_i64() => Value::String(n.to_string()),
+        Value::Array(items) => Value::Array(items.iter().map(portable).collect()),
+        Value::Object(map) => {
+            Value::Object(map.iter().map(|(k, v)| (k.clone(), portable(v))).collect())
+        }
+        _ => value.clone(),
+    }
 }
 
 impl Parser {

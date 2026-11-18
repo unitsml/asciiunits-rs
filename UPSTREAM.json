@@ -29,6 +29,7 @@
     "repository": "lutaml/lutaml-rs",
     "commit": "945e6ada11f52f77b959a5df1f05fdbd23092939",
     "output": "src/generated",
-    "check": "CI job 'Generated LutaML models' regenerates and diffs"
+    "check": "CI job 'Generated LutaML models' regenerates and diffs",
+    "manifest_sha256": "sha256:e4a5018baa3718badd85e4a3f15d00545d31b7f03c650bb9b5e12ea53e735db0"
   }
 }

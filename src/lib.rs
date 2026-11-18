@@ -9,7 +9,7 @@ use sha2::{Digest, Sha256};
 
 pub const ARTIFACT: &str = include_str!("../artifacts/unitsml.json");
 pub const ARTIFACT_SHA256: &str =
-    "139d91337a0944d60f36bc144a205625349f4b3b8b7ff1a0fba3c61e70c57804";
+    "98e53c5fa31233725158a49af75361b0aacc4bf3292a8c09675995f85a0b7e4c";
 const ENTRY: &str = "expression";
 
 #[derive(Debug, Serialize)]

@@ -10,9 +10,22 @@ crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 parsanol = { git = "https://github.com/parsanol/parsanol-rs", rev = "8f8afd878a3e91b83e43c2005459bc9dc4927851" }
-serde = { version = "1", features = ["derive"] }
-serde_json = { version = "1", features = ["preserve_order"] }
+# Exact versions: the generated models' runtime (lutaml-rs) pins them.
+serde = { version = "=1.0.219", features = ["derive"] }
+serde_json = { version = "=1.0.140", features = ["preserve_order"] }
 sha2 = "0.11"
+
+[dependencies.lutaml_rs]
+package = "lutaml-rs"
+git = "https://github.com/lutaml/lutaml-rs"
+rev = "945e6ada11f52f77b959a5df1f05fdbd23092939"
+default-features = false
+features = ["runtime"]
+optional = true
+
+[features]
+# Typed LutaML models generated from the Ruby model (src/generated).
+models = ["dep:lutaml_rs"]
 
 [profile.dev]
 debug = 0

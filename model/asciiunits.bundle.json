@@ -1,0 +1,1329 @@
+{
+  "lml_bundle": 1,
+  "roots": [
+    "Asciiunits::Model::Document@default"
+  ],
+  "models": {
+    "Asciiunits::Model::Document@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::Document",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "expression",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "expression"
+              ],
+              "to": "expression",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::Expression@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::Expression",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "close_paren",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "dimension",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "extender",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "first_int_exp_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::FirstIntExpSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "first_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::FirstSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "hyphen",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "implicit_extended",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::ImplicitExtended@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "int_exp",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "integer",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "open_paren",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "power_numerator",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::PowerNumerator@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "prefix",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "second_int_exp_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::SecondIntExpSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "second_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::SecondSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sequence",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sqrt",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "unit",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "close_paren"
+              ],
+              "to": "close_paren",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "dimension"
+              ],
+              "to": "dimension",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "extender"
+              ],
+              "to": "extender",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "first_int_exp_set"
+              ],
+              "to": "first_int_exp_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "first_set"
+              ],
+              "to": "first_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "hyphen"
+              ],
+              "to": "hyphen",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "implicit_extended"
+              ],
+              "to": "implicit_extended",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "int_exp"
+              ],
+              "to": "int_exp",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "integer"
+              ],
+              "to": "integer",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "open_paren"
+              ],
+              "to": "open_paren",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "power_numerator"
+              ],
+              "to": "power_numerator",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "prefix"
+              ],
+              "to": "prefix",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "second_int_exp_set"
+              ],
+              "to": "second_int_exp_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "second_set"
+              ],
+              "to": "second_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sequence"
+              ],
+              "to": "sequence",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sqrt"
+              ],
+              "to": "sqrt",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "unit"
+              ],
+              "to": "unit",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::FirstIntExpSet@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::FirstIntExpSet",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "extender",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "int_exp",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sequence",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "extender"
+              ],
+              "to": "extender",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "int_exp"
+              ],
+              "to": "int_exp",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sequence"
+              ],
+              "to": "sequence",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::FirstSet@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::FirstSet",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "dimension",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "extender",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "power_numerator",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::PowerNumerator@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "prefix",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sequence",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sqrt",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "unit",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "dimension"
+              ],
+              "to": "dimension",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "extender"
+              ],
+              "to": "extender",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "power_numerator"
+              ],
+              "to": "power_numerator",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "prefix"
+              ],
+              "to": "prefix",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sequence"
+              ],
+              "to": "sequence",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sqrt"
+              ],
+              "to": "sqrt",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "unit"
+              ],
+              "to": "unit",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::ImplicitExtended@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::ImplicitExtended",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "extender",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "first_int_exp_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::FirstIntExpSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "first_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::FirstSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "second_int_exp_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::SecondIntExpSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "second_set",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::SecondSet@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "extender"
+              ],
+              "to": "extender",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "first_int_exp_set"
+              ],
+              "to": "first_int_exp_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "first_set"
+              ],
+              "to": "first_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "second_int_exp_set"
+              ],
+              "to": "second_int_exp_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "second_set"
+              ],
+              "to": "second_set",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::PowerNumerator@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::PowerNumerator",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "int_exp",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "integer",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "int_exp"
+              ],
+              "to": "int_exp",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "integer"
+              ],
+              "to": "integer",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::SecondIntExpSet@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::SecondIntExpSet",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "extender",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "int_exp",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sequence",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "extender"
+              ],
+              "to": "extender",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "int_exp"
+              ],
+              "to": "int_exp",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sequence"
+              ],
+              "to": "sequence",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::SecondSet@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::SecondSet",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "dimension",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "extender",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "power_numerator",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::PowerNumerator@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "prefix",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sequence",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "sqrt",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Expression@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "unit",
+          "type": {
+            "kind": "model",
+            "id": "Asciiunits::Model::Slice@default"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "dimension"
+              ],
+              "to": "dimension",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "extender"
+              ],
+              "to": "extender",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "power_numerator"
+              ],
+              "to": "power_numerator",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "prefix"
+              ],
+              "to": "prefix",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sequence"
+              ],
+              "to": "sequence",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "sqrt"
+              ],
+              "to": "sqrt",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "unit"
+              ],
+              "to": "unit",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Asciiunits::Model::Slice@default": {
+      "lml": 2,
+      "model": "Asciiunits::Model::Slice",
+      "register": "default",
+      "attributes": [
+        {
+          "name": "value",
+          "type": {
+            "kind": "builtin",
+            "name": "string"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "offset",
+          "type": {
+            "kind": "builtin",
+            "name": "integer"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "length",
+          "type": {
+            "kind": "builtin",
+            "name": "integer"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "line",
+          "type": {
+            "kind": "builtin",
+            "name": "integer"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        },
+        {
+          "name": "column",
+          "type": {
+            "kind": "builtin",
+            "name": "integer"
+          },
+          "required": false,
+          "collection": false,
+          "default": {
+            "present": false
+          },
+          "initialize_empty": false
+        }
+      ],
+      "mappings": {
+        "json": {
+          "rules": [
+            {
+              "key": [
+                "value"
+              ],
+              "to": "value",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "offset"
+              ],
+              "to": "offset",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "length"
+              ],
+              "to": "length",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "line"
+              ],
+              "to": "line",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            },
+            {
+              "key": [
+                "column"
+              ],
+              "to": "column",
+              "render": {
+                "nil": "omit",
+                "empty": "omit",
+                "default": false
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "value_types": {},
+  "capabilities": [
+    "json"
+  ]
+}

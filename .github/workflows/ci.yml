@@ -58,3 +58,84 @@ jobs:
         run: cargo +${{ matrix.rust }} test --locked --all-targets
       - name: cargo build --locked --lib
         run: cargo +${{ matrix.rust }} build --locked --lib
+
+  models:
+    # Regenerates src/generated from the Ruby model with the pinned exporter
+    # and generator (UPSTREAM.json "model_producer"/"model_generator"), fails
+    # on drift, and replays the shared corpus through the generated models.
+    name: Generated LutaML models
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Check out the pinned shared corpus
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: unitsml/asciiunits-testsuite
+          ref: 3f835ba8ea441de0c1081a4cd6a53ed52959f32c
+          path: asciiunits-testsuite
+          persist-credentials: false
+      - name: Check out the Ruby model source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: unitsml/asciiunits
+          ref: 0780018c4ebbaf036dacde2ef5329e4f0834da94
+          path: codegen-src/asciiunits
+          persist-credentials: false
+      - name: Check out the LML exporter (lutaml-model)
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: lutaml/lutaml-model
+          ref: fd2989fd8478b1ecb2508d98fa2d66792c09c72b
+          path: codegen-src/lutaml-model
+          persist-credentials: false
+      - name: Check out the Rust generator (lutaml-rs)
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: lutaml/lutaml-rs
+          ref: 945e6ada11f52f77b959a5df1f05fdbd23092939
+          path: codegen-src/lutaml-rs
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@20eb24b0d509e2b9ed9b6d42ddfeb992915e0564 # v1
+        with:
+          ruby-version: "3.4"
+      - name: Install lutaml-model from the pinned commit
+        working-directory: codegen-src/lutaml-model
+        run: |
+          gem build lutaml-model.gemspec
+          gem install --no-document ./lutaml-model-*.gem
+      - name: Export the LML bundle; it must equal model/asciiunits.bundle.json
+        run: |
+          ruby codegen/export_portable_models.rb codegen-src/asciiunits "$RUNNER_TEMP/asciiunits.bundle.json"
+          sha256sum "$RUNNER_TEMP/asciiunits.bundle.json" model/asciiunits.bundle.json
+          cmp "$RUNNER_TEMP/asciiunits.bundle.json" model/asciiunits.bundle.json
+      - name: Install Rust toolchain
+        run: rustup toolchain install stable --profile minimal
+      - name: Build the pinned generator
+        run: cargo +stable build --locked --release --manifest-path codegen-src/lutaml-rs/Cargo.toml --bin lutaml-rs
+      - name: Generate the Rust models
+        run: |
+          target/release/lutaml-rs generate --input model/asciiunits.bundle.json --output "$RUNNER_TEMP/generated" | tee "$RUNNER_TEMP/generate.out"
+      - name: Upload the generated models
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: generated-models
+          path: |
+            ${{ runner.temp }}/generated
+            ${{ runner.temp }}/generate.out
+      - name: Committed src/generated must equal the fresh generation
+        run: |
+          if [ ! -d src/generated ]; then
+            echo "::error::src/generated is not committed; testing the fresh generation only"
+            cp -r "$RUNNER_TEMP/generated" src/generated
+            touch "$RUNNER_TEMP/missing"
+          fi
+          diff -r "$RUNNER_TEMP/generated" src/generated
+      - name: cargo test --features models
+        run: cargo +stable test --locked --features models --test model
+      - name: Fail while src/generated is not committed
+        run: test ! -e "$RUNNER_TEMP/missing"

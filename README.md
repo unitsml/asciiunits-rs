@@ -14,7 +14,10 @@ the Ruby gem's `Asciiunits.parse_model` returns. The types and JSON codecs in
 which `codegen/export_portable_models.rb` exports from the Ruby model. CI
 repeats both steps at the commits in `UPSTREAM.json` and fails if the result
 differs from the committed files, then replays the shared corpus through the
-generated models.
+generated models. With the feature, the C ABI also exports
+`asciiunits_parse_model_json_v1`, which returns the typed model's portable
+JSON. That JSON writes exact integers, such as a slice's offset, as decimal
+strings.
 
 The crate also supplies the version-1 C ABI in `include/asciiunits.h`.
 Build with `cargo build --locked`. Free each owned JSON result using

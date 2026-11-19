@@ -8,7 +8,7 @@
   "corpus_repository": "unitsml/asciiunits-testsuite",
   "corpus_source": "3f835ba8ea441de0c1081a4cd6a53ed52959f32c",
   "corpus_sha256": "deacefbd7f320b554ae1d9998dadceaba29382aa8ba349f339eac67ab14fac0a",
-  "parsanol": "8f8afd878a3e91b83e43c2005459bc9dc4927851",
+  "parsanol": "8c6a21aa2622b0951f254e41da04853816258893",
   "mapper_source_sha256": "bb12937a421f6b536758a96d905780008c8d90935dc028f3ee62860cdff5ae9a",
   "model_source_sha256": "03b4d13180f4ed5c528344e4cf397a67c86a4a69e8d276f991c68859d16f78c3",
   "mapper_dist_sha256": "1f295006530c218d28b5ad121755ee4852c9b5d95b4b91bce5eef2f87d2da5d7",

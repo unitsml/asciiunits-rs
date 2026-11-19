@@ -12,5 +12,24 @@
   "mapper_source_sha256": "bb12937a421f6b536758a96d905780008c8d90935dc028f3ee62860cdff5ae9a",
   "model_source_sha256": "03b4d13180f4ed5c528344e4cf397a67c86a4a69e8d276f991c68859d16f78c3",
   "mapper_dist_sha256": "1f295006530c218d28b5ad121755ee4852c9b5d95b4b91bce5eef2f87d2da5d7",
-  "model_oracle_sha256": "ac1000c7e44528489bb87965ad318cd0b1613cd742209f5dff9f25c83e853d2c"
+  "model_oracle_sha256": "ac1000c7e44528489bb87965ad318cd0b1613cd742209f5dff9f25c83e853d2c",
+  "model_producer": {
+    "source_repository": "unitsml/asciiunits",
+    "source_commit": "0780018c4ebbaf036dacde2ef5329e4f0834da94",
+    "exporter": "codegen/export_portable_models.rb",
+    "exporter_sha256": "4627e4f39d8af78ebaac74f61687f7ef97e8bea4b462ea6686531abacc0663c9",
+    "framework_repository": "lutaml/lutaml-model",
+    "framework_commit": "fd2989fd8478b1ecb2508d98fa2d66792c09c72b",
+    "bundle": "model/asciiunits.bundle.json",
+    "bundle_sha256": "17bb563548cbbc45a50709827c2d9788072544d0e8ebbe9a4c79713fdae5bb2a",
+    "models": 9,
+    "json_policy": "existing implicit Ruby default field mappings materialized in isolated export process"
+  },
+  "model_generator": {
+    "repository": "lutaml/lutaml-rs",
+    "commit": "945e6ada11f52f77b959a5df1f05fdbd23092939",
+    "output": "src/generated",
+    "check": "CI job 'Generated LutaML models' regenerates and diffs",
+    "manifest_sha256": "sha256:e4a5018baa3718badd85e4a3f15d00545d31b7f03c650bb9b5e12ea53e735db0"
+  }
 }

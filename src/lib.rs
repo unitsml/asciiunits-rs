@@ -1,6 +1,11 @@
 //! Edition-2 AsciiUnits structural parsing through Parsanol.
 mod ffi;
+#[cfg(feature = "models")]
+#[rustfmt::skip]
+pub mod generated;
 mod mapper;
+#[cfg(feature = "models")]
+pub mod typed;
 
 use parsanol::{PargArtifact, PargError};
 use serde::Serialize;

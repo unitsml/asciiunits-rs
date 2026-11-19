@@ -9,6 +9,9 @@ uint32_t asciiunits_abi_version(void);
 /* mode: 0 = raw shape, 1 = structural model. Input bytes are borrowed.
  * The returned NUL-terminated UTF-8 JSON belongs to the caller. */
 char *asciiunits_parse_json_v1(const uint8_t *input, size_t length, uint32_t mode);
+/* Built with the `models` feature only: the typed model's portable JSON,
+ * {"abi_version":1,"ok":true,"model":{...}}. Same ownership rules. */
+char *asciiunits_parse_model_json_v1(const uint8_t *input, size_t length);
 void asciiunits_free_json_v1(char *json);
 #ifdef __cplusplus
 }

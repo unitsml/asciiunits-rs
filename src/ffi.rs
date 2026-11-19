@@ -24,6 +24,18 @@ fn response(result: Result<Value, Error>) -> *mut c_char {
         .into_raw()
 }
 
+unsafe fn input_text<'a>(input: *const u8, length: usize) -> Result<&'a str, Error> {
+    if input.is_null() || length > isize::MAX as usize {
+        return Err(Error::InvalidArgument {
+            message: "invalid input buffer".into(),
+        });
+    }
+    let bytes = unsafe { std::slice::from_raw_parts(input, length) };
+    std::str::from_utf8(bytes).map_err(|_| Error::InvalidArgument {
+        message: "input is not UTF-8".into(),
+    })
+}
+
 #[no_mangle]
 pub extern "C" fn asciiunits_abi_version() -> u32 {
     1
@@ -38,15 +50,7 @@ pub unsafe extern "C" fn asciiunits_parse_json_v1(
     mode: u32,
 ) -> *mut c_char {
     let result = std::panic::catch_unwind(|| {
-        if input.is_null() || length > isize::MAX as usize {
-            return Err(Error::InvalidArgument {
-                message: "invalid input buffer".into(),
-            });
-        }
-        let bytes = unsafe { std::slice::from_raw_parts(input, length) };
-        let text = std::str::from_utf8(bytes).map_err(|_| Error::InvalidArgument {
-            message: "input is not UTF-8".into(),
-        })?;
+        let text = unsafe { input_text(input, length) }?;
         match mode {
             0 => parser()?.parse_shape(text),
             1 => parser()?.parse(text),
@@ -61,6 +65,55 @@ pub unsafe extern "C" fn asciiunits_parse_json_v1(
         })
     });
     response(result)
+}
+
+/// The typed model (`Parser::parse_model`) as its portable JSON:
+/// `{"abi_version": 1, "ok": true, "model": {...}}`. A grammar refusal or
+/// parser budget carries the same error payload as asciiunits_parse_json_v1;
+/// a model the generated codecs refuse is `{"category": "model_error"}`.
+/// Input is borrowed for the duration of this call. Release the returned
+/// buffer exactly once with asciiunits_free_json_v1.
+#[cfg(feature = "models")]
+#[no_mangle]
+pub unsafe extern "C" fn asciiunits_parse_model_json_v1(
+    input: *const u8,
+    length: usize,
+) -> *mut c_char {
+    use crate::typed::{to_portable_json, ModelError};
+    let reply = std::panic::catch_unwind(|| {
+        let text = match unsafe { input_text(input, length) } {
+            Ok(text) => text,
+            Err(error) => return json!({"abi_version": 1, "ok": false, "error": error}),
+        };
+        let model = parser()
+            .map_err(ModelError::Parse)
+            .and_then(|parser| parser.parse_model(text))
+            .and_then(|model| to_portable_json(&model));
+        match model {
+            Ok(model) => json!({
+                "abi_version": 1,
+                "ok": true,
+                "model": serde_json::from_str::<Value>(&model).expect("generated JSON codec"),
+            }),
+            Err(ModelError::Parse(error)) => {
+                json!({"abi_version": 1, "ok": false, "error": error})
+            }
+            Err(error) => json!({
+                "abi_version": 1,
+                "ok": false,
+                "error": {"category": "model_error", "message": error.to_string()},
+            }),
+        }
+    })
+    .unwrap_or_else(|_| {
+        let error = Error::Runtime {
+            message: "native parser panicked".into(),
+        };
+        json!({"abi_version": 1, "ok": false, "error": error})
+    });
+    CString::new(reply.to_string())
+        .expect("JSON escapes NUL")
+        .into_raw()
 }
 
 #[no_mangle]

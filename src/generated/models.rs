@@ -179,16 +179,26 @@ pub enum ContentToken {
  Element { attribute: String, index: u64 },
  Text { #[serde(flatten)] source: TextSource },
  Cdata { #[serde(flatten)] source: TextSource },
+ Comment { literal: String },
+ ProcessingInstruction { target: String, data: String },
+ Attribute { attribute: String, index: u64 },
 }
 // serde cannot combine deny_unknown_fields with flatten, so tokens are read
 // through one closed wire shape and then checked against the token kind.
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct ContentTokenWire { kind: String, attribute: Option<String>, index: Option<u64>, literal: Option<String> }
+struct ContentTokenWire { kind: String, attribute: Option<String>, index: Option<u64>, literal: Option<String>, target: Option<String>, data: Option<String> }
 impl<'de> Deserialize<'de> for ContentToken {
  fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
   let w = ContentTokenWire::deserialize(d)?;
   let bad = |m: &str| serde::de::Error::custom(m);
+  if w.kind == "processing_instruction" {
+   return match (w.attribute, w.index, w.literal, w.target, w.data) {
+    (None, None, None, Some(target), Some(data)) => Ok(Self::ProcessingInstruction { target, data }),
+    _ => Err(bad("processing_instruction token needs target and data only")),
+   };
+  }
+  if w.target.is_some() || w.data.is_some() { return Err(bad("only processing_instruction tokens carry target and data")); }
   let source = match (w.attribute, w.index, w.literal) {
    (Some(attribute), Some(index), None) => TextSource::Member { attribute, index },
    (None, None, Some(literal)) => TextSource::Literal { literal },
@@ -199,13 +209,17 @@ impl<'de> Deserialize<'de> for ContentToken {
    ("element", _) => Err(bad("element token needs attribute and index only")),
    ("text", source) => Ok(Self::Text { source }),
    ("cdata", source) => Ok(Self::Cdata { source }),
+   ("comment", TextSource::Literal { literal }) => Ok(Self::Comment { literal }),
+   ("comment", _) => Err(bad("comment token needs literal only")),
+   ("attribute", TextSource::Member { attribute, index: 0 }) => Ok(Self::Attribute { attribute, index: 0 }),
+   ("attribute", _) => Err(bad("attribute token needs attribute and index 0 only")),
    _ => Err(bad("unknown content token kind")),
   }
  }
 }
 impl ContentToken {
  pub fn reference(&self) -> Option<(&str,u64)> { match self {
- Self::Element { attribute,index } | Self::Text { source: TextSource::Member { attribute,index } } | Self::Cdata { source: TextSource::Member { attribute,index } } => Some((attribute,*index)),
+ Self::Element { attribute,index } | Self::Attribute { attribute,index } | Self::Text { source: TextSource::Member { attribute,index } } | Self::Cdata { source: TextSource::Member { attribute,index } } => Some((attribute,*index)),
  _ => None,
  } }
 }
@@ -221,9 +235,18 @@ expression: Presence::Absent,
 } } }
 impl Asciiunits_Model_Document {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expression { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expression { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_Document, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_Document::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expression { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -286,25 +309,98 @@ unit: Presence::Absent,
 } } }
 impl Asciiunits_Model_Expression {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.close_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.dimension { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.extender { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.first_int_exp_set { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.first_set { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.hyphen { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.implicit_extended { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.int_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.integer { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.open_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.power_numerator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.prefix { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.second_int_exp_set { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.second_set { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sequence { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sqrt { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unit { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.close_paren { v.validate()?; }
-if let Presence::Value(v)=&self.dimension { v.validate()?; }
-if let Presence::Value(v)=&self.extender { v.validate()?; }
-if let Presence::Value(v)=&self.first_int_exp_set { v.validate()?; }
-if let Presence::Value(v)=&self.first_set { v.validate()?; }
-if let Presence::Value(v)=&self.hyphen { v.validate()?; }
-if let Presence::Value(v)=&self.implicit_extended { v.validate()?; }
-if let Presence::Value(v)=&self.int_exp { v.validate()?; }
-if let Presence::Value(v)=&self.integer { v.validate()?; }
-if let Presence::Value(v)=&self.open_paren { v.validate()?; }
-if let Presence::Value(v)=&self.power_numerator { v.validate()?; }
-if let Presence::Value(v)=&self.prefix { v.validate()?; }
-if let Presence::Value(v)=&self.second_int_exp_set { v.validate()?; }
-if let Presence::Value(v)=&self.second_set { v.validate()?; }
-if let Presence::Value(v)=&self.sequence { v.validate()?; }
-if let Presence::Value(v)=&self.sqrt { v.validate()?; }
-if let Presence::Value(v)=&self.unit { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_Expression, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_Expression::__lml_validate_field_0, Asciiunits_Model_Expression::__lml_validate_field_1, Asciiunits_Model_Expression::__lml_validate_field_2, Asciiunits_Model_Expression::__lml_validate_field_3, Asciiunits_Model_Expression::__lml_validate_field_4, Asciiunits_Model_Expression::__lml_validate_field_5, Asciiunits_Model_Expression::__lml_validate_field_6, Asciiunits_Model_Expression::__lml_validate_field_7, Asciiunits_Model_Expression::__lml_validate_field_8, Asciiunits_Model_Expression::__lml_validate_field_9, Asciiunits_Model_Expression::__lml_validate_field_10, Asciiunits_Model_Expression::__lml_validate_field_11, Asciiunits_Model_Expression::__lml_validate_field_12, Asciiunits_Model_Expression::__lml_validate_field_13, Asciiunits_Model_Expression::__lml_validate_field_14, Asciiunits_Model_Expression::__lml_validate_field_15, Asciiunits_Model_Expression::__lml_validate_field_16];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.close_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.dimension { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.extender { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_int_exp_set { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_set { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.hyphen { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.implicit_extended { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.int_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.integer { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_9(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.open_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_10(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.power_numerator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_11(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.prefix { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_12(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.second_int_exp_set { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_13(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.second_set { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_14(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sequence { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_15(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sqrt { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_16(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unit { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -325,11 +421,28 @@ sequence: Presence::Absent,
 } } }
 impl Asciiunits_Model_FirstIntExpSet {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.extender { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.int_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sequence { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.extender { v.validate()?; }
-if let Presence::Value(v)=&self.int_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sequence { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_FirstIntExpSet, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_FirstIntExpSet::__lml_validate_field_0, Asciiunits_Model_FirstIntExpSet::__lml_validate_field_1, Asciiunits_Model_FirstIntExpSet::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.extender { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.int_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sequence { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -362,15 +475,48 @@ unit: Presence::Absent,
 } } }
 impl Asciiunits_Model_FirstSet {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.dimension { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.extender { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.power_numerator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.prefix { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sequence { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sqrt { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unit { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.dimension { v.validate()?; }
-if let Presence::Value(v)=&self.extender { v.validate()?; }
-if let Presence::Value(v)=&self.power_numerator { v.validate()?; }
-if let Presence::Value(v)=&self.prefix { v.validate()?; }
-if let Presence::Value(v)=&self.sequence { v.validate()?; }
-if let Presence::Value(v)=&self.sqrt { v.validate()?; }
-if let Presence::Value(v)=&self.unit { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_FirstSet, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_FirstSet::__lml_validate_field_0, Asciiunits_Model_FirstSet::__lml_validate_field_1, Asciiunits_Model_FirstSet::__lml_validate_field_2, Asciiunits_Model_FirstSet::__lml_validate_field_3, Asciiunits_Model_FirstSet::__lml_validate_field_4, Asciiunits_Model_FirstSet::__lml_validate_field_5, Asciiunits_Model_FirstSet::__lml_validate_field_6];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.dimension { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.extender { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.power_numerator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.prefix { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sequence { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sqrt { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unit { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -397,13 +543,38 @@ second_set: Presence::Absent,
 } } }
 impl Asciiunits_Model_ImplicitExtended {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.extender { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.first_int_exp_set { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.first_set { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.second_int_exp_set { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.second_set { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.extender { v.validate()?; }
-if let Presence::Value(v)=&self.first_int_exp_set { v.validate()?; }
-if let Presence::Value(v)=&self.first_set { v.validate()?; }
-if let Presence::Value(v)=&self.second_int_exp_set { v.validate()?; }
-if let Presence::Value(v)=&self.second_set { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_ImplicitExtended, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_ImplicitExtended::__lml_validate_field_0, Asciiunits_Model_ImplicitExtended::__lml_validate_field_1, Asciiunits_Model_ImplicitExtended::__lml_validate_field_2, Asciiunits_Model_ImplicitExtended::__lml_validate_field_3, Asciiunits_Model_ImplicitExtended::__lml_validate_field_4];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.extender { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_int_exp_set { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_set { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.second_int_exp_set { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.second_set { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -421,10 +592,23 @@ integer: Presence::Absent,
 } } }
 impl Asciiunits_Model_PowerNumerator {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.int_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.integer { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.int_exp { v.validate()?; }
-if let Presence::Value(v)=&self.integer { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_PowerNumerator, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_PowerNumerator::__lml_validate_field_0, Asciiunits_Model_PowerNumerator::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.int_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.integer { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -445,11 +629,28 @@ sequence: Presence::Absent,
 } } }
 impl Asciiunits_Model_SecondIntExpSet {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.extender { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.int_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sequence { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.extender { v.validate()?; }
-if let Presence::Value(v)=&self.int_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sequence { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_SecondIntExpSet, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_SecondIntExpSet::__lml_validate_field_0, Asciiunits_Model_SecondIntExpSet::__lml_validate_field_1, Asciiunits_Model_SecondIntExpSet::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.extender { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.int_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sequence { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -482,15 +683,48 @@ unit: Presence::Absent,
 } } }
 impl Asciiunits_Model_SecondSet {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.dimension { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.extender { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.power_numerator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.prefix { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sequence { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sqrt { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unit { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.dimension { v.validate()?; }
-if let Presence::Value(v)=&self.extender { v.validate()?; }
-if let Presence::Value(v)=&self.power_numerator { v.validate()?; }
-if let Presence::Value(v)=&self.prefix { v.validate()?; }
-if let Presence::Value(v)=&self.sequence { v.validate()?; }
-if let Presence::Value(v)=&self.sqrt { v.validate()?; }
-if let Presence::Value(v)=&self.unit { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Asciiunits_Model_SecondSet, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Asciiunits_Model_SecondSet::__lml_validate_field_0, Asciiunits_Model_SecondSet::__lml_validate_field_1, Asciiunits_Model_SecondSet::__lml_validate_field_2, Asciiunits_Model_SecondSet::__lml_validate_field_3, Asciiunits_Model_SecondSet::__lml_validate_field_4, Asciiunits_Model_SecondSet::__lml_validate_field_5, Asciiunits_Model_SecondSet::__lml_validate_field_6];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.dimension { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.extender { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.power_numerator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.prefix { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sequence { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sqrt { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unit { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -518,6 +752,8 @@ column: Presence::Absent,
 impl Asciiunits_Model_Slice {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }

@@ -96,7 +96,7 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: lutaml/lutaml-rs
-          ref: 945e6ada11f52f77b959a5df1f05fdbd23092939
+          ref: 1f826b7dd0ba1545479df8a4ba715d67e2985b32
           path: codegen-src/lutaml-rs
           persist-credentials: false
       - name: Set up Ruby
